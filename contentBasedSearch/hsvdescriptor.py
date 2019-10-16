@@ -59,7 +59,6 @@ class HSVDescriptor:
         # return the feature vector
         return np.array(features)
 
-
     def histogram(self, image, mask=None):
         # extract a 3D color histogram from the masked region of the
         # image, using the supplied number of bins per channel; then
