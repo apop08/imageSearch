@@ -9,6 +9,15 @@ class HSVDescriptor:
         self.bins = bins
 
     def describe(self, image):
+        """Creates masks and describes the histogram of
+        each region
+
+        Parameters:
+            image (image): image to describe
+
+        Returns:
+            np.array: returns feature vector
+        """
         # convert to hsv
         image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -49,3 +58,17 @@ class HSVDescriptor:
 
         # return the feature vector
         return np.array(features)
+
+
+    def histogram(self, image, mask=None):
+        # extract a 3D color histogram from the masked region of the
+        # image, using the supplied number of bins per channel; then
+        # normalize the histogram
+        hist = cv2.calcHist([image], [0, 1, 2], mask, self.bins,
+                            [0, 180, 0, 256, 0, 256])
+
+        # otherwise handle for OpenCV 3+
+        hist = cv2.normalize(hist, hist).flatten()
+
+        # return the histogram
+        return hist
