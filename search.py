@@ -43,7 +43,7 @@ for (i, (score, resultID)) in enumerate(results):
     print("[INFO] {result_num}. {result} - {score:.2f}".format(result_num=i + 1, result=resultID,
                                                                score=score))
     result = cv2.imread("{}/{}".format(args["dataset"], resultID))
-    montage.addResult(result, text="#{}".format(i + 1), highlight=resultID in queryRelevant)
+    montage.add_result(result, text="#{}".format(i + 1), highlight=resultID in queryRelevant)
 
 # show the output image of results
 cv2.imshow("Results", helpers.resize(montage.montage, height=700))
