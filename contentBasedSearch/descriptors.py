@@ -1,6 +1,25 @@
 # import the necessary packages
 import numpy as np
 import cv2
+from tensorflow.keras.applications.resnet50 import ResNet50
+from tensorflow.keras.models import Model
+
+
+def load_headless_pretrained_model():
+    """
+    Loads the pretrained resnet50 model with classification layer cut off
+    """
+    print("Loading headless pretrained model...")
+    pretrained_resnet = ResNet50(weights='imagenet', include_top=False)
+    return pretrained_resnet
+
+
+class ResNetDescriptor:
+    def __init__(self):
+        self.model = load_headless_pretrained_model()
+
+    def describe(self, image):
+        return self.model.predict(image)
 
 
 class HSVDescriptor:

@@ -5,6 +5,8 @@ import cv2
 import sys
 image_types = (".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff")
 
+from tensorflow.keras.applications.imagenet_utils import preprocess_input
+from tensorflow.keras.preprocessing import image
 
 def list_images(basePath, contains=None):
     # return the set of files that are valid
@@ -61,3 +63,28 @@ def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
 
     # return the resized image
     return resized
+
+
+def load_paired_img_wrd(folder):
+    class_names = [fold for fold in os.listdir(folder) if ".DS" not in fold]
+    image_list = []
+    labels_list = []
+    paths_list = []
+    for cl in class_names:
+        splits = cl.split("_")
+        subfiles = [f for f in os.listdir(folder + "/" + cl) if ".DS" not in f]
+
+        for subf in subfiles:
+            full_path = os.path.join(folder, cl, subf)
+            # 229 x 229 is the size resnet 50 uses for images
+            img = image.load_img(full_path, target_size=(229, 229))
+            x_raw = image.img_to_array(img)
+            x_expand = np.expand_dims(x_raw, axis=0) # add a column for the index of the image
+            x = preprocess_input(x_expand) # normalize to [-1, 1]
+            image_list.append(x)
+            paths_list.append(full_path)
+    img_data = np.array(image_list)
+    img_data = np.rollaxis(img_data, 1, 0)
+    img_data = img_data[0]
+
+    return img_data, np.array(labels_list), paths_list

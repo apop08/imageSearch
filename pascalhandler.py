@@ -7,6 +7,9 @@ from urllib.parse import urljoin
 from pyquery import PyQuery
 import os
 import requests
+import numpy as np
+
+
 
 class PascalSentenceDataSet():
     DATASET_DIR = 'datasets/pascal/'
@@ -47,6 +50,7 @@ class PascalSentenceDataSet():
                         break
                     print("error occurred while fetching img")
                     print("retry...")
+
 
 
 if __name__ == "__main__":

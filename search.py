@@ -1,7 +1,7 @@
 # import the necessary packages
 from __future__ import print_function
 from contentBasedSearch.resultsmontage import ResultsMontage
-from contentBasedSearch.hsvdescriptor import HSVDescriptor
+from contentBasedSearch.descriptors import HSVDescriptor
 from contentBasedSearch.searcher import Searcher
 import helpers
 import argparse

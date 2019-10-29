@@ -1,6 +1,6 @@
 # import the necessary packages
 from __future__ import print_function
-from contentBasedSearch.hsvdescriptor import HSVDescriptor
+from contentBasedSearch.descriptors import ResNetDescriptor
 import helpers
 import progressbar
 import argparse
@@ -15,7 +15,7 @@ ap.add_argument("-i", "--index", required=True,
 args = vars(ap.parse_args())
 
 # initialize the color descriptor and open the output index file for writing
-desc = HSVDescriptor((4, 6, 3))
+desc = ResNetDescriptor()
 output = open(args["index"], "w")
 
 # grab the list of image paths and initialize the progress bar
