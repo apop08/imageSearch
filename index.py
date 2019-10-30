@@ -29,14 +29,14 @@ for (i, imagePath) in enumerate(sorted(imagePaths)):
     # extract the image filename (i.e. the unique image ID) from the image
     # path, then load the image itself
     filename = imagePath[imagePath.rfind("/") + 1:]
-    image = cv2.imread(imagePath)
+    image = helpers.image_preprocessor(imagePath)
 
     # describe the image
     features = desc.describe(image)
 
     # write the features to our index file
-    features = [str(x) for x in features]
-    output.write("{},{}\n".format(filename, ",".join(features)))
+    feat_str = [str(x) for x in features[0]]
+    output.write("{},{}\n".format(filename, ",".join(feat_str)))
     pbar.update(i)
 
 # close the output index file

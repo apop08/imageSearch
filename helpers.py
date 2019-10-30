@@ -1,12 +1,21 @@
 # import the necessary packages
+from tensorflow.keras.applications.imagenet_utils import preprocess_input
+from tensorflow.keras.preprocessing import image as image_utils
+
 import os
 import numpy as np
 import cv2
 import sys
 image_types = (".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff")
 
-from tensorflow.keras.applications.imagenet_utils import preprocess_input
-from tensorflow.keras.preprocessing import image
+
+def image_preprocessor(image_path):
+    image = image_utils.load_img(image_path, target_size=(224, 224))
+    image = image_utils.img_to_array(image)
+    image = np.expand_dims(image, axis=0)
+    image = preprocess_input(image)
+    return image
+
 
 def list_images(basePath, contains=None):
     # return the set of files that are valid
@@ -33,38 +42,6 @@ def list_files(basePath, validExts=None, contains=None):
                 yield imagePath
 
 
-def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
-    # initialize the dimensions of the image to be resized and
-    # grab the image size
-    dim = None
-    (h, w) = image.shape[:2]
-
-    # if both the width and height are None, then return the
-    # original image
-    if width is None and height is None:
-        return image
-
-    # check to see if the width is None
-    if width is None:
-        # calculate the ratio of the height and construct the
-        # dimensions
-        r = height / float(h)
-        dim = (int(w * r), height)
-
-    # otherwise, the height is None
-    else:
-        # calculate the ratio of the width and construct the
-        # dimensions
-        r = width / float(w)
-        dim = (width, int(h * r))
-
-    # resize the image
-    resized = cv2.resize(image, dim, interpolation=inter)
-
-    # return the resized image
-    return resized
-
-
 def load_paired_img_wrd(folder):
     class_names = [fold for fold in os.listdir(folder) if ".DS" not in fold]
     image_list = []
@@ -77,8 +54,8 @@ def load_paired_img_wrd(folder):
         for subf in subfiles:
             full_path = os.path.join(folder, cl, subf)
             # 229 x 229 is the size resnet 50 uses for images
-            img = image.load_img(full_path, target_size=(229, 229))
-            x_raw = image.img_to_array(img)
+            img = image_utils.load_img(full_path, target_size=(229, 229))
+            x_raw = image_utils.img_to_array(img)
             x_expand = np.expand_dims(x_raw, axis=0) # add a column for the index of the image
             x = preprocess_input(x_expand) # normalize to [-1, 1]
             image_list.append(x)

@@ -1,8 +1,9 @@
 # import the necessary packages
 from __future__ import print_function
 from contentBasedSearch.resultsmontage import ResultsMontage
-from contentBasedSearch.descriptors import HSVDescriptor
+from contentBasedSearch.descriptors import ResNetDescriptor
 from contentBasedSearch.searcher import Searcher
+import tensorflow as tf
 import helpers
 import argparse
 import json
@@ -17,7 +18,7 @@ ap.add_argument("-r", "--relevant", required=True, help="Path to relevant dictio
 args = vars(ap.parse_args())
 
 # initialize the image descriptor and results montage
-desc = HSVDescriptor((4, 6, 3))
+desc = ResNetDescriptor()
 montage = ResultsMontage((240, 320), 5, 20)
 relevant = json.loads(open(args["relevant"]).read())
 
@@ -28,8 +29,8 @@ queryRelevant = relevant[queryFilename]
 
 # load the query image, display it, and describe it
 print("[INFO] describing query...")
-query = cv2.imread(args["query"])
-cv2.imshow("Query", helpers.resize(query, width=320))
+query = helpers.image_preprocessor(args["query"])
+cv2.imshow("Query", helpers.resize(tf.image.convert_image_dtype(query, dtype=tf.uint8), width=320))
 features = desc.describe(query)
 
 # perform the search

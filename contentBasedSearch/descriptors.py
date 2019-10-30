@@ -10,7 +10,7 @@ def load_headless_pretrained_model():
     Loads the pretrained resnet50 model with classification layer cut off
     """
     print("Loading headless pretrained model...")
-    pretrained_resnet = ResNet50(weights='imagenet', include_top=False)
+    pretrained_resnet = ResNet50(weights='imagenet', include_top=False, pooling='avg')
     return pretrained_resnet
 
 
